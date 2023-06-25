@@ -1,6 +1,6 @@
 import { Station } from "amtrak/dist/types";
 import { useRef, useState } from "react";
-import { StyleSheet, View, Text, Animated, TouchableWithoutFeedback, Easing } from "react-native";
+import { StyleSheet, View, Text, Animated, Easing, TouchableWithoutFeedback } from "react-native";
 
 function getDiffMins(schedTime:string, actualTime:string): number {
     const schedDate:Date = new Date(schedTime);
@@ -20,7 +20,7 @@ function getTimelinessMessage(stationName:string, diffMins:number, status:string
             returnString += "At ";
             break;
         case "Departed":
-            returnString += "Departed ";
+            returnString += "Arrived at ";
             break;
         default:
             return "Current status is unknown.";

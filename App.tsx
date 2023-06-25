@@ -3,11 +3,11 @@ import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import TrainList from './Components/TrainList';
 
+//Sees if the train number is between 520-553 or 720-751
 const inBounds = (trainNum: number):boolean => {
   return (trainNum >= 520 && trainNum <= 553) || (trainNum >= 720 && trainNum <= 751);
 }
 
-//Navigator is causing issues
 export default function App() {
   const [trainNum, setTrainNum] = useState<number | null>(null);
   const [trainNumString, setTrainNumString] = useState<string>('');
