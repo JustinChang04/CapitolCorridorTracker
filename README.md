@@ -1,7 +1,14 @@
-A React Native-based app to track the timeliness of Capitol Corridor trains running between San Jose/Oakland and Sacramento/Auburn.
+# Introduction
+An app to track the timeliness of Capitol Corridor trains running between San Jose/Oakland and Sacramento/Auburn. I built this app using React Native as the framework. I used [Amtrak.js](https://github.com/piemadd/amtrak) to fetch live train data from Amtrak.
 
-The app allows the user to input a train number, and then if it's a valid train number at the time, it will fetch all of the stations (origin station at the top, destination station at the bottom) and display them. A color indicator on the right indicates the timeliness of the train. To refresh data, pull down on the list. Click on a tile, and there will be a dropdown indicating the arrival status of the train (whether or not it arrived and timeliness). There also information blubs on the bottom of each station panel stating the arrival time and status. On the bottom of the station list, there is a message indicating when the data was last updated.
+## Disclaimer
+This app has no relation to Amtrak.
 
-Green indicates that the train is on time. Yellow indicates that the train is at most 15 minutes late. Red indicates that the train is over 15 minutes late. Blue indicates that the train is early.
+## Usage
+The app prompt the user to enter a valid train number before showing any data.  
+If there is a train running with that ID number, then the app will show a list of station card, sorted from top to bottom by origin to destination.  
+Each station card will have information on the train's respective arrival time and arrival/departure status.  
+Clicking on a station card will show delay time and arrival/departure status.
 
-Note: The app was created with 'npx create-expo-app'. After cloning it, add a folder called 'node_modules', and run 'npm install'. This will install all of the missing folders necessary for this app.
+## After Cloning
+This app was created with `npx create-expo-app`. After cloning this repository, add a folder called 'node_modules', and run `npm install`. This will install all of the missing folders necessary for this app.
