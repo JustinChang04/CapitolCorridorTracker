@@ -18,12 +18,6 @@ export default function TrainList(props: {trainNum: number, style:StyleProp<View
 
   let isRefreshing = useRef(false);
 
-  const refreshData = () => {
-    setError(null);
-    setStations(null);
-    fetchData();
-  }
-
   const fetchData = async () => {
     try {
       const train:trainData = new trainData(props.trainNum);
@@ -58,7 +52,7 @@ export default function TrainList(props: {trainNum: number, style:StyleProp<View
           refreshControl={
             <RefreshControl
               refreshing={isRefreshing.current}
-              onRefresh={refreshData}
+              onRefresh={fetchData}
             />
           }
           />);

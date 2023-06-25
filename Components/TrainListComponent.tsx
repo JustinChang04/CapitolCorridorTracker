@@ -3,18 +3,10 @@ import { useRef, useState } from "react";
 import { StyleSheet, View, Text, Animated, TouchableWithoutFeedback, Easing } from "react-native";
 
 function getDiffMins(schedTime:string, actualTime:string): number {
-    //Example time code is 2023-06-20T14:48:00-07:00
+    const schedDate:Date = new Date(schedTime);
+    const actualDate:Date = new Date(actualTime);
 
-    const schedHour:number = parseInt(schedTime.substring(11, 13));
-    const actualHour:number = parseInt(actualTime.substring(11, 13));
-
-    const schedMin:number = parseInt(schedTime.substring(14, 16));
-    const actualMin:number = parseInt(actualTime.substring(14, 16));
-
-    const hoursDiff: number = actualHour - schedHour;
-    const minutesDiff: number = actualMin - schedMin;
-
-    return hoursDiff * 60 + minutesDiff;
+    return (actualDate.getTime() - schedDate.getTime()) / (1000 * 60);
 }
 
 function getTimelinessMessage(stationName:string, diffMins:number, status:string):string {
@@ -31,7 +23,7 @@ function getTimelinessMessage(stationName:string, diffMins:number, status:string
             returnString += "Departed ";
             break;
         default:
-            return "Current status is unknown";
+            return "Current status is unknown.";
     }
 
     returnString += stationName + " ";
@@ -44,7 +36,7 @@ function getTimelinessMessage(stationName:string, diffMins:number, status:string
         const delayHours:number = Math.floor(diffMins / 60);
 
         if (delayHours === 0) {
-            returnString += delayMins + ((delayMins === 1) ? " minute late." : " minutes late");
+            returnString += delayMins + ((delayMins === 1) ? " minute late." : " minutes late.");
         }
         else {
             returnString += delayHours + ((delayHours === 1) ? " hour " : "hours ");
@@ -87,6 +79,20 @@ function getColor(diff:number):string {
     }
 }
 
+function getArrival(station:Station):string {
+    const date:Date = new Date(station.arr);
+
+    switch(station.status) {
+        case "Enroute":
+            return "Expected arrival: " + date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        case "Departed":
+        case "Station":
+            return "Arrived: " + date.toLocaleString('en-US', { hour: 'numeric', minute: 'numeric', hour12: true });
+        default:
+            return "Error";
+    }
+}
+
 export default function TrainListComponent (props: {station:Station}) {
     const timeDiff:number = getDiffMins(props.station.schArr, props.station.arr);
     const color:string = getColor(timeDiff);
@@ -97,30 +103,23 @@ export default function TrainListComponent (props: {station:Station}) {
     const toggleDropdown = () => {
         expanded.current = !(expanded.current);
 
-        if (props.station.code === "OKJ") {
-            Animated.timing(height, {
-                toValue: ((expanded.current) ? 70 : 0),
-                duration: 100,
-                easing: Easing.linear,
-                useNativeDriver: false
-            }).start();
-        }
-        else {
-            Animated.timing(height, {
-                toValue: ((expanded.current) ? 50 : 0),
-                duration: 100,
-                easing: Easing.linear,
-                useNativeDriver: false
-            }).start();
-        }
+        Animated.timing(height, {
+            toValue: ((expanded.current) ? 60 : 0),
+            duration: 100,
+            easing: Easing.linear,
+            useNativeDriver: false
+        }).start();
     }
 
-    //Create a dropdown list later
     return (
         <View style={styles.container}>
             <TouchableWithoutFeedback onPress={toggleDropdown}>
                 <View style={styles.mainContainer}>
-                    <Text>{props.station.code}</Text>
+                    <View style={{flexDirection: 'column'}}>
+                        <Text style={{fontWeight:"300"}}>{props.station.code}</Text>
+                        <Text style={styles.infoText}>Status: {props.station.status}</Text>
+                        <Text style={styles.infoText}>{getArrival(props.station)}</Text>
+                    </View>
                     <View style={[{backgroundColor: color}, styles.timelinessIndicator]}/>
                 </View>
             </TouchableWithoutFeedback>
@@ -151,5 +150,10 @@ const styles = StyleSheet.create({
         width:20,
         height:10,
         borderRadius:10
+    },
+    infoText: {
+        fontSize: 12,
+        fontStyle: "italic",
+        fontWeight: "300"
     }
 });

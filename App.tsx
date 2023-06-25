@@ -10,7 +10,7 @@ const inBounds = (trainNum: number):boolean => {
 //Navigator is causing issues
 export default function App() {
   const [trainNum, setTrainNum] = useState<number | null>(null);
-  let trainNumString = '';
+  const [trainNumString, setTrainNumString] = useState<string>('');
 
   const updateTrainNum = () => {
     Keyboard.dismiss();
@@ -58,7 +58,8 @@ export default function App() {
               keyboardType='numeric'
               placeholder='Number'
               maxLength={3}
-              onChangeText={(text) => {trainNumString = text;}}/>
+              value={trainNumString}
+              onChangeText={(text) => {setTrainNumString(text);}}/>
           </View>
           <TouchableOpacity
             style={styles.button}
