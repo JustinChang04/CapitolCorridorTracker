@@ -1,16 +1,8 @@
-import { FlatList, Text, View, StyleProp, ViewStyle } from "react-native";
-import { useEffect, useState } from "react";
+import { FlatList, Text, View, StyleProp, ViewStyle, RefreshControl } from "react-native";
+import { useEffect, useState, useRef } from "react";
 import trainData from "./trainData"
 import { Station } from "amtrak/dist/types";
 import TrainListComponent from "./TrainListComponent";
-
-function renderStationBlock (station:Station) {
-  const stationCode:string = station.code;
-  const scheduledArrival:string = station.schArr;
-  const actualArrival:string = station.arr;
-
-  return <TrainListComponent stationCode={stationCode} schedArr={scheduledArrival} actualArr={actualArrival} />
-};
 
 export default function TrainList(props: {trainNum: number, style:StyleProp<ViewStyle>}) {
   if (props.trainNum === null) {
@@ -22,24 +14,32 @@ export default function TrainList(props: {trainNum: number, style:StyleProp<View
   }
 
   const [error, setError] = useState<string | null>(null);
-  const [stations, setStations] = useState<Station[]>([]);
+  const [stations, setStations] = useState<Station[] | null>([]);
+
+  let isRefreshing = useRef(false);
+
+  const refreshData = () => {
+    setError(null);
+    setStations(null);
+    fetchData();
+  }
+
+  const fetchData = async () => {
+    try {
+      const train:trainData = new trainData(props.trainNum);
+      const stations:Station[] = await train.getStations();
+      setStations(stations);
+
+      if (error !== null) {
+        setError(null);
+      }
+    } catch (error) {
+      setError(error.message);
+    }
+  };
 
   useEffect(() => {
-      const fetchData = async () => {
-        try {
-          const train:trainData = new trainData(props.trainNum);
-          const stations:Station[] = await train.getStations();
-          setStations(stations);
-
-          if (error !== null) {
-            setError(null);
-          }
-        } catch (error) {
-          setError(error.message);
-        }
-      };
-
-      fetchData();
+    fetchData();
   }, [props.trainNum]);
 
   if (error) {
@@ -51,8 +51,15 @@ export default function TrainList(props: {trainNum: number, style:StyleProp<View
   }
 
   return (<FlatList
+          style={{backgroundColor:"white"}}
           data = {stations}
-          renderItem = {({item}) => renderStationBlock(item)}
+          renderItem = {({item}) => <TrainListComponent station={item}/>}
           keyExtractor = {(item:Station) => item.code}
+          refreshControl={
+            <RefreshControl
+              refreshing={isRefreshing.current}
+              onRefresh={refreshData}
+            />
+          }
           />);
 }

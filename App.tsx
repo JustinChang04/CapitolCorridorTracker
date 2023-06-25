@@ -7,7 +7,6 @@ const inBounds = (trainNum: number):boolean => {
   return (trainNum >= 520 && trainNum <= 553) || (trainNum >= 720 && trainNum <= 751);
 }
 
-
 //Navigator is causing issues
 export default function App() {
   const [trainNum, setTrainNum] = useState<number | null>(null);
@@ -77,8 +76,8 @@ const styles = StyleSheet.create({
   container: {
     padding: 20,
     paddingTop: 5,
-    height: "100%",
     flexDirection: 'column',
+    marginBottom: "3%"
   },
   heading: {
     fontWeight: "500",
