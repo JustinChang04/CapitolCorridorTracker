@@ -11,11 +11,11 @@ function getLastUpdate():JSX.Element {
   const timeZoneOffset:number = now.getTimezoneOffset() / -60;
 
   if (timeZoneOffset == -7) {
-    returnString += now.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true, timeZone: "PDT"});
+    returnString += now.toLocaleString('en-US', {month: 'long', day: 'numeric', year: 'numeric', hour:'numeric', minute: 'numeric', hour12: true, timeZone: "PDT"});
     returnString += " PDT."
   }
   else {
-    returnString += now.toLocaleString('en-US', {hour: 'numeric', minute: 'numeric', hour12: true, timeZone: "PST"});
+    returnString += now.toLocaleString('en-US', {month: 'long', day: 'numeric', year: 'numeric', hour: 'numeric', minute: 'numeric', hour12: true, timeZone: "PST"});
     returnString += " PST."
   }
 
