@@ -2,7 +2,7 @@
 An app to track the timeliness of Capitol Corridor trains running between San Jose/Oakland and Sacramento/Auburn. I built this app using React Native as the framework. I used [Amtrak.js](https://github.com/piemadd/amtrak) to fetch live train data from Amtrak.
 
 ## Disclaimer
-This app has no relation to Amtrak.
+This app and its creater have no relation to Amtrak.
 
 ## Usage
 The app will prompt the user to enter a valid train number before showing any data.  
