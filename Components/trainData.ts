@@ -16,7 +16,7 @@ export default class TrainData {
 
     private async initializeData(trainNumber:number):Promise<void> {
         const today:Date = new Date();
-        const dayOfMonth:number = today.getDate() + 1;
+        const dayOfMonth:number = today.getUTCDate();
         const trainID:string = trainNumber + "-" + dayOfMonth;
 
         try{
